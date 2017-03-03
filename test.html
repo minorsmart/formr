@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <style type="text/css">
 .knitr .inline {
@@ -63,24 +63,49 @@
   font-weight: bold;
 }
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script>
-$(document).ready(function(){
-    $("button").click(function(){
-        $.post("http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com/ocpu/user/rstudio/library/hellorobert/R/hellorobert/json/",
-        {
-          'n': 10000,
-        },
-        function(data){
-            $("#output").text(data);
-        });
-    });
-});
-</script>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Call R Through OpenCPU</title> 
+  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+  <script>
+
+      //When Document is Ready
+      $(function () {
+
+          //Go R button Click Event Handler
+          $("#cmdGoR").click(function () {
+              var resultsUrlPrefix = "http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com",
+                  url = resultsUrlPrefix + "/ocpu//user/rstudio/library/hellorobert/R/dataTest";
+              var rCommands = $("#txtRCommands").val();
+              $.post(url,
+              function (data) {
+                
+                var statResultsLink = resultsUrlPrefix + data.toString().match(/.+\/.val/m) + "\/json";
+               
+                  //Add statistical (textual) results to results div
+                  $('#results').append("<br/>");
+                  $('<div/>', {
+                      id: 'statResults'
+                  }).appendTo('#results');
+                
+                  $("#statResults").load(statResultsLink);
+
+
+              })
+              .error(function (jqXHR, status, error) {
+                  alert(jqXHR.responseText);
+              });
+          });
+
+      });
+
+  </script>
 </head>
 <body>
 
-<button>Send an HTTP POST request to a page and get the result back</button>
-<div id="output"></div>
+<input type="button" value="Run code" id="cmdGoR" />
+
+<div id="results">
+</div>
+
 </body>
 </html>
