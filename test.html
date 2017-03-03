@@ -67,12 +67,12 @@
 <script>
 $(document).ready(function(){
     $("button").click(function(){
-        $.post("http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com/ocpu/user/rstudio/library/hellorobert/R/hellorobert/json",
+        $.post("http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com/ocpu/user/rstudio/library/hellorobert/R/hellorobert/json/",
         {
           'n': 10000,
         },
-        function(data,status){
-            alert("Data: " + data + "\nStatus: " + status);
+        function(data){
+            $("#output").text(data);
         });
     });
 });
@@ -81,6 +81,6 @@ $(document).ready(function(){
 <body>
 
 <button>Send an HTTP POST request to a page and get the result back</button>
-
+<code id="output"></code>
 </body>
 </html>
