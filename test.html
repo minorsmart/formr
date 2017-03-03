@@ -67,10 +67,8 @@
   <title>Call R Through OpenCPU</title> 
   <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
   <script>
-
       //When Document is Ready
       $(function () {
-
           //Go R button Click Event Handler
           $("#cmdGoR").click(function () {
               var resultsUrlPrefix = "http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com",
@@ -88,16 +86,12 @@
                   }).appendTo('#results');
                 
                   $("#statResults").load(statResultsLink);
-
-
               })
               .error(function (jqXHR, status, error) {
                   alert(jqXHR.responseText);
               });
           });
-
       });
-
   </script>
 </head>
 <body>
