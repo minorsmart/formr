@@ -90,39 +90,6 @@
     <script>
         //When Document is Ready
         $(function() {
-            //Go R button Click Event Handler
-            //This part prepares the url string
-            var resultsUrlPrefix = "http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com",
-                url = resultsUrlPrefix + "/ocpu//user/rstudio/library/hellorobert/R/dataTest";
-            //The following makes a posts the url to the opencpu server on AWS and
-            //concatenates the reply into a result link
-            $.post(url,
-                    function(data) {
-
-                        var statResultsLink = resultsUrlPrefix + data.toString().match(/.+\/.val/m) + "\/json";
-
-                        //Add statistical (textual) results to results div
-                        $('#results').append("<br/>");
-                        $('<div/>', {
-                            id: 'statResults'
-                        }).appendTo('#results');
-                        //The result link is loaded and returns a json data set
-                        $("#statResults").load(statResultsLink);
-                    })
-                .error(function(jqXHR, status, error) {
-                    alert(jqXHR.responseText);
-                });
-
-        });
-    </script>
-
-
-
-
-
-    <script>
-        //When Document is Ready
-        $(function() {
             //This part prepares the url string
             var resultsUrlPrefix = "http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com",
                 url = resultsUrlPrefix + "/ocpu//user/rstudio/library/hellorobert/R/dataTest";
@@ -208,7 +175,7 @@
                                 .attr("y", 5)
                                 .attr("dy", ".71em")
                                 .style("text-anchor", "end")
-                                .text("Frequency");
+                                .text("Leeftijd");
 
 
                             // Add bar chart
