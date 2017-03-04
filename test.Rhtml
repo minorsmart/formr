@@ -1,43 +1,182 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Call R Through OpenCPU</title> 
-  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
-  <script>
-      //When Document is Ready
-      $(function () {
-          //Go R button Click Event Handler
-          $("#cmdGoR").click(function () {
-              var resultsUrlPrefix = "http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com",
-                  url = resultsUrlPrefix + "/ocpu//user/rstudio/library/hellorobert/R/dataTest";
-              var rCommands = $("#txtRCommands").val();
-              $.post(url,
-              function (data) {
-                
-                var statResultsLink = resultsUrlPrefix + data.toString().match(/.+\/.val/m) + "\/json";
-               
-                  //Add statistical (textual) results to results div
-                  $('#results').append("<br/>");
-                  $('<div/>', {
-                      id: 'statResults'
-                  }).appendTo('#results');
-                
-                  $("#statResults").load(statResultsLink);
-              })
-              .error(function (jqXHR, status, error) {
-                  alert(jqXHR.responseText);
-              });
-          });
-      });
-  </script>
+    <style>
+        .bar {
+            fill: steelblue;
+        }
+        .bar:hover {
+            fill: brown;
+        }
+        .axis {
+            font: 10px sans-serif;
+        }
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+    </style>
 </head>
+
 <body>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script>
+        //When Document is Ready
+        $(function() {
+            //Go R button Click Event Handler
+            //This part prepares the url string
+            var resultsUrlPrefix = "http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com",
+                url = resultsUrlPrefix + "/ocpu//user/rstudio/library/hellorobert/R/dataTest";
+            //The following makes a posts the url to the opencpu server on AWS and
+            //concatenates the reply into a result link
+            $.post(url,
+                    function(data) {
 
-<input type="button" value="Run code" id="cmdGoR" />
+                        var statResultsLink = resultsUrlPrefix + data.toString().match(/.+\/.val/m) + "\/json";
 
-<div id="results">
-</div>
+                        //Add statistical (textual) results to results div
+                        $('#results').append("<br/>");
+                        $('<div/>', {
+                            id: 'statResults'
+                        }).appendTo('#results');
+                        //The result link is loaded and returns a json data set
+                        $("#statResults").load(statResultsLink);
+                    })
+                .error(function(jqXHR, status, error) {
+                    alert(jqXHR.responseText);
+                });
 
+        });
+    </script>
+
+
+
+
+
+    <script>
+        //When Document is Ready
+        $(function() {
+            //This part prepares the url string
+            var resultsUrlPrefix = "http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com",
+                url = resultsUrlPrefix + "/ocpu//user/rstudio/library/hellorobert/R/dataTest";
+            //The following makes a posts the url to the opencpu server on AWS and
+            //concatenates the reply into a result link
+            $.post(url,
+                    function(data) {
+
+                        var statResultsLink = resultsUrlPrefix + data.toString().match(/.+\/.val/m) + "\/json";
+                        $("#json1").attr("href", statResultsLink)
+
+                        // Build chart (d3.js)
+                        // set the dimensions of the canvas
+                        var margin = {
+                                top: 20,
+                                right: 20,
+                                bottom: 70,
+                                left: 40
+                            },
+                            width = 600 - margin.left - margin.right,
+                            height = 300 - margin.top - margin.bottom;
+
+
+                        // set the ranges
+                        var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+
+                        var y = d3.scale.linear().range([height, 0]);
+
+                        // define the axis
+                        var xAxis = d3.svg.axis()
+                            .scale(x)
+                            .orient("bottom")
+
+
+                        var yAxis = d3.svg.axis()
+                            .scale(y)
+                            .orient("left")
+                            .ticks(10);
+
+
+                        // add the SVG element
+                        var svg = d3.select("body").append("svg")
+                            .attr("width", width + margin.left + margin.right)
+                            .attr("height", height + margin.top + margin.bottom)
+                            .append("g")
+                            .attr("transform",
+                                "translate(" + margin.left + "," + margin.top + ")");
+
+
+                        // load the data
+
+                        d3.json(statResultsLink, function(error, data) {
+
+                            data.forEach(function(d) {
+                                d.namen = d.namen;
+                                d.leeftijd = +d.leeftijd;
+                            });
+
+                            // scale the range of the data
+                            x.domain(data.map(function(d) {
+                                return d.namen;
+                            }));
+                            y.domain([0, d3.max(data, function(d) {
+                                return d.leeftijd;
+                            })]);
+
+                            // add axis
+                            svg.append("g")
+                                .attr("class", "x axis")
+                                .attr("transform", "translate(0," + height + ")")
+                                .call(xAxis)
+                                .selectAll("text")
+                                .style("text-anchor", "end")
+                                .attr("dx", "-.8em")
+                                .attr("dy", "-.55em")
+                                .attr("transform", "rotate(-90)");
+
+                            svg.append("g")
+                                .attr("class", "y axis")
+                                .call(yAxis)
+                                .append("text")
+                                .attr("transform", "rotate(-90)")
+                                .attr("y", 5)
+                                .attr("dy", ".71em")
+                                .style("text-anchor", "end")
+                                .text("Frequency");
+
+
+                            // Add bar chart
+                            svg.selectAll("bar")
+                                .data(data)
+                                .enter().append("rect")
+                                .attr("class", "bar")
+                                .attr("x", function(d) {
+                                    return x(d.namen);
+                                })
+                                .attr("width", x.rangeBand())
+                                .attr("y", function(d) {
+                                    return y(d.leeftijd);
+                                })
+                                .attr("height", function(d) {
+                                    return height - y(d.leeftijd);
+                                });
+
+                        });
+
+                    })
+                .error(function(jqXHR, status, error) {
+                    alert(jqXHR.responseText);
+                });
+        });
+    </script>
+
+    <div id="results">
+    </div>
+    <a id="json1" target="_blank">string</a>
 </body>
+
 </html>
