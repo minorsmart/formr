@@ -1,6 +1,19 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+---
+title: "OpenCPU"
+author: "Witek ten Hove"
+date: "3/4/2017"
+output: html_document
+---
+
+# Building dynamic web objects using [OpenCPU](https://www.opencpu.org/)
+
+With OpenCPU you can use R as a data source for JavaScript objects (e.g. charts). The structure is as follows:
+
+1. You have a server running OpenCPU, R and RStudio. See [this](http://jeroenooms.github.io/opencpu-manual/opencpu-server.pdf) tutorial for instructions. My server runs [here](http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com/ocpu/test/).
+2. The [library](http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com/ocpu/library/) folder of R contains packages with functions that can be accessed as an API.
+3. You can [add users](https://www.digitalocean.com/community/tutorials/how-to-set-up-rstudio-on-an-ubuntu-cloud-server) to the server who can build their [own packages](http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com/ocpu/user/rstudio/library/) with their own functions.
+4. The functions in the package can be accessed via a server [url](http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com/ocpu/user/rstudio/library/hellorobert/R/dataTest/print). Ending it with `/json` returns a [json file](http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com/ocpu/user/rstudio/library/hellorobert/R/dataTest/json).
+5. This json file can be used as input for a JavaScript object, for instance a [chart](http://www.smartedu.nl/opencpu/test.html).
 
 <head>
     <style>
@@ -142,5 +155,3 @@
     </script>
     <a id="json1" target="_blank">string</a>
 </body>
-
-</html>
