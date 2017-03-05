@@ -27,7 +27,7 @@
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script>
         //When Document is Ready
-        $(function() {
+        
             //This part prepares the url string
             var resultsUrlPrefix = "http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com",
                 url = resultsUrlPrefix + "/ocpu//user/rstudio/library/hellorobert/R/dataTest";
@@ -138,7 +138,6 @@
                 .error(function(jqXHR, status, error) {
                     alert(jqXHR.responseText);
                 });
-        });
     </script>
     <a id="json1" target="_blank">string</a>
 </body>
