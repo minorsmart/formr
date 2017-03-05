@@ -5,6 +5,7 @@ date: "3/4/2017"
 output:
    html_document:
       theme: spacelab
+      highlight: tango
 ---
 
 # Building dynamic web objects using [OpenCPU](https://www.opencpu.org/)
@@ -19,9 +20,9 @@ With OpenCPU you can use R as a data source for JavaScript objects (e.g. charts)
 2. The [library](http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com/ocpu/library/) folder of R contains packages with functions that can be accessed as an API.
 3. You can [add users](https://www.digitalocean.com/community/tutorials/how-to-set-up-rstudio-on-an-ubuntu-cloud-server) to the server who can build their [own packages](http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com/ocpu/user/rstudio/library/) with their own functions.
 4. The functions in the package can be accessed via a server [url](http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com/ocpu/user/rstudio/library/hellorobert/R/dataTest/print). Ending it with `/json` returns a [json file](http://ec2-34-252-17-179.eu-west-1.compute.amazonaws.com/ocpu/user/rstudio/library/hellorobert/R/dataTest/json).
-5. This json file can be used as input for a JavaScript object, for instance a [chart](http://www.smartedu.nl/opencpu/test.html). See source code:
+5. This json file can be used as input for a JavaScript object, for instance a [chart](http://www.smartedu.nl/opencpu/test.html). See source code of this file.
 <br><br>
-<head>
+
     <style>
         .bar {
             fill: steelblue;
@@ -39,12 +40,10 @@ With OpenCPU you can use R as a data source for JavaScript objects (e.g. charts)
             shape-rendering: crispEdges;
         }
     </style>
-</head>
-
-<body>
+    <div align="center">
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script>
+    <script align="center">
         //When Document is Ready
         $(function() {
             //This part prepares the url string
@@ -64,7 +63,7 @@ With OpenCPU you can use R as a data source for JavaScript objects (e.g. charts)
                                 top: 20,
                                 right: 20,
                                 bottom: 70,
-                                left: 40
+                                left: 200
                             },
                             width = 600 - margin.left - margin.right,
                             height = 300 - margin.top - margin.bottom;
@@ -159,5 +158,5 @@ With OpenCPU you can use R as a data source for JavaScript objects (e.g. charts)
                 });
         });
     </script>
-    <a id="json1" target="_blank">string</a>
-</body>
+    <a id="json1" target="_blank">JSON</a>
+<div>
